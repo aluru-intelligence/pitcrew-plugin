@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "pitcrew": {
+      "type": "http",
+      "url": "https://mcp.pitcrew.ai"
+    }
+  }
+}

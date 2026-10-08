@@ -1,0 +1,8 @@
+{
+  "name": "pitcrew",
+  "version": "0.1.0",
+  "description": "Build AI compliance workflows conversationally. Describe your workflow and PitCrew produces a workflow JSON spec you can run on the PitCrew platform.",
+  "author": {
+    "name": "Aluru Intel"
+  }
+}

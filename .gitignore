@@ -1,0 +1,20 @@
+# Runtime scratch directory used by the builder harness and Claude Code sessions
+workspace/
+
+# Claude Code local session/editor state
+.claude/
+
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Editors
+.vscode/
+.idea/
+*.swp
