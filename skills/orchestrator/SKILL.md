@@ -97,13 +97,57 @@ from your own prior turns and pass them forward in the next worker dispatch.
    Step C — Present to the user:
      Show the completed board_draft JSON to the user in a fenced code block, then say:
        "Board ready: **{name}** ({N} swimlane(s), {M} tasks).
-        Knowledge and settings generated. Tell me what to change, or copy this JSON
-        to run it on PitCrew."
+        Knowledge and settings generated. Want me to publish this to PitCrew and run it?
+        Reply 'yes' to publish and run, or tell me what to change."
 
    Do NOT skip knowledge-worker or config-worker — they enrich the board before it is shown.
    Do NOT present the board_draft until BOTH knowledge-worker and config-worker have completed.
 
-9. If any worker returns status="error": inform the user and offer to retry or start over.
+9. Runner flow — triggered when the user approves publishing after step 8C.
+
+   This step calls three MCP tools on the pitcrew server: `publish_agent`,
+   `start_agent_run`, and `get_run_status`. The current board_draft (from step 8)
+   is already in your context; carry it forward.
+
+   Step A — Publish:
+     Call `publish_agent(board_draft=<the completed board_draft>)`.
+     On success you receive `{board_id, name, status, validation_warnings}`. Keep
+     the `board_id` in context. If `validation_warnings` is non-empty, mention them
+     to the user as a one-line note but continue.
+     On failure (any `success: false`), tell the user the error and stop — do not
+     attempt to run. Offer to go back to edit-worker if the error looks fixable.
+
+   Step B — Collect run inputs:
+     Read the board_draft's `input_schema.properties`. For each required field,
+     ask the user for a value in plain chat ("What should I use for `{field_name}`?
+     ({description})"). Build a `run_input` dict of {field_name: user_value}.
+
+     File-shaped inputs are not supported in this flow yet. If a field has
+     `type: "file"`, `format: "file"`, or `format: "binary"`, stop and tell the
+     user: "This agent needs file inputs — run it from the PitCrew UI for now."
+     Do not call `start_agent_run` in that case.
+
+   Step C — Start the run:
+     Call `start_agent_run(board_id=<from Step A>, run_input=<from Step B>)`.
+     On success you receive `{run_id, status}`. Keep the `run_id` in context.
+     On failure, tell the user the error and stop.
+
+   Step D — Poll until complete:
+     Call `get_run_status(run_id=<from Step C>)` once. If `status` is in
+     `[pending, running, paused]`, tell the user "Running... current status: {status}"
+     and poll again (user may respond "check again" or you re-dispatch yourself
+     every ~10 seconds within the turn). When `status` is in
+     `[completed, failed, cancelled]`, stop polling.
+
+   Step E — Surface the result:
+     If terminal status is `completed`: call
+     `get_run_status(run_id=<...>, output_only=true)` once more to fetch
+     `run_output`, then show the output to the user in a fenced code block
+     and say: "Run complete. **{name}** finished successfully."
+     If terminal status is `failed` or `cancelled`: tell the user the status and
+     surface any error from the response. Offer to retry.
+
+10. If any worker returns status="error": inform the user and offer to retry or start over.
 
 ## Worker routing guide
 

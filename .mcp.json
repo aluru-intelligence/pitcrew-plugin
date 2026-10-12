@@ -2,7 +2,7 @@
   "mcpServers": {
     "pitcrew": {
       "type": "http",
-      "url": "https://mcp.pitcrew.ai"
+      "url": "https://bridgette-unideal-nonadhesively.ngrok-free.dev/mcp"
     }
   }
 }
