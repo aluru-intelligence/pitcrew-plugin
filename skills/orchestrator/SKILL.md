@@ -105,38 +105,53 @@ from your own prior turns and pass them forward in the next worker dispatch.
 
 9. Runner flow — triggered when the user approves publishing after step 8C.
 
-   This step calls three MCP tools on the pitcrew server: `publish_agent`,
-   `start_agent_run`, and `get_run_status`. The current board_draft (from step 8)
-   is already in your context; carry it forward.
+   The MCP server handles input collection via a native form (elicitation), so
+   you no longer ask for inputs in chat. The current board_draft from step 8 is
+   already in your context; carry it forward.
 
    Step A — Publish:
      Call `publish_agent(board_draft=<the completed board_draft>)`.
-     On success you receive `{board_id, name, status, validation_warnings}`. Keep
-     the `board_id` in context. If `validation_warnings` is non-empty, mention them
-     to the user as a one-line note but continue.
-     On failure (any `success: false`), tell the user the error and stop — do not
-     attempt to run. Offer to go back to edit-worker if the error looks fixable.
+     On success you receive `{board_id, name, status, validation_warnings}`.
+     Keep `board_id` and `name` in context. If `validation_warnings` is non-empty,
+     mention them to the user as a one-line note but continue.
+     On failure (any `success: false`), tell the user the error and stop. Offer to
+     go back to edit-worker if the error looks fixable.
 
-   Step B — Collect run inputs:
-     Read the board_draft's `input_schema.properties`. For each required field,
-     ask the user for a value in plain chat ("What should I use for `{field_name}`?
-     ({description})"). Build a `run_input` dict of {field_name: user_value}.
+   Step B — Start the run:
+     Call `start_agent_run(board_id=<from Step A>)`.
+     The MCP server will fetch the agent's input_schema and open a native form in
+     the user's host to collect text/number/boolean/enum inputs. You do NOT ask
+     the user for these inputs in chat yourself.
 
-     File-shaped inputs are not supported in this flow yet. If a field has
-     `type: "file"`, `format: "file"`, or `format: "binary"`, stop and tell the
-     user: "This agent needs file inputs — run it from the PitCrew UI for now."
-     Do not call `start_agent_run` in that case.
+     Two possible shapes come back:
 
-   Step C — Start the run:
-     Call `start_agent_run(board_id=<from Step A>, run_input=<from Step B>)`.
-     On success you receive `{run_id, status}`. Keep the `run_id` in context.
-     On failure, tell the user the error and stop.
+       (B.1) No file inputs needed:
+             `{success: true, run_id, status, elicited_inputs}` → go directly to Step D.
+
+       (B.2) File inputs needed:
+             `{success: true, pending_run_id, elicited_inputs, file_fields: [{name, description}, ...]}`
+             → go to Step C to collect and upload each file.
+
+     On failure: tell the user the error and stop.
+
+   Step C — Upload files (only if Step B returned a `pending_run_id`):
+     For each entry in `file_fields`:
+       1. Ask the user for a local path to the file:
+          "I need a file for **{name}** ({description}). What's the local path?"
+       2. Use the Bash tool to read the file and base64-encode it:
+          `base64 -i <path>` on macOS/Linux (output is the base64 string).
+       3. Call `upload_file_to_run(pending_run_id=<...>, field_name=<name>, filename=<basename of path>, content_base64=<the base64 string>)`.
+       4. On failure, tell the user and stop — do not attempt to start the run with
+          missing files.
+
+     Once ALL files have been uploaded successfully, call
+     `start_pending_run(pending_run_id=<...>)`. On success you receive `{run_id, status}`.
+     Keep `run_id` in context and go to Step D.
 
    Step D — Poll until complete:
-     Call `get_run_status(run_id=<from Step C>)` once. If `status` is in
+     Call `get_run_status(run_id=<from Step B.1 or C>)`. If `status` is in
      `[pending, running, paused]`, tell the user "Running... current status: {status}"
-     and poll again (user may respond "check again" or you re-dispatch yourself
-     every ~10 seconds within the turn). When `status` is in
+     and poll again every ~10 seconds within the turn. When `status` is in
      `[completed, failed, cancelled]`, stop polling.
 
    Step E — Surface the result:
