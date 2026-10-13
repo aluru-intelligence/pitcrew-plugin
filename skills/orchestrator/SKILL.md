@@ -105,9 +105,9 @@ from your own prior turns and pass them forward in the next worker dispatch.
 
 9. Runner flow — triggered when the user approves publishing after step 8C.
 
-   The MCP server handles input collection via a native form (elicitation), so
-   you no longer ask for inputs in chat. The current board_draft from step 8 is
-   already in your context; carry it forward.
+   Input collection, file uploads, and run start all happen inside a single
+   interactive form rendered by the host. You do NOT ask for inputs in chat and
+   you do NOT handle file paths or base64 encoding yourself.
 
    Step A — Publish:
      Call `publish_agent(board_draft=<the completed board_draft>)`.
@@ -117,44 +117,27 @@ from your own prior turns and pass them forward in the next worker dispatch.
      On failure (any `success: false`), tell the user the error and stop. Offer to
      go back to edit-worker if the error looks fixable.
 
-   Step B — Start the run:
-     Call `start_agent_run(board_id=<from Step A>)`.
-     The MCP server will fetch the agent's input_schema and open a native form in
-     the user's host to collect text/number/boolean/enum inputs. You do NOT ask
-     the user for these inputs in chat yourself.
+   Step B — Open the input form:
+     Call `start_agent_run(agent_id=<board_id from Step A>)`.
+     This renders an interactive form in the user's host — scalar fields plus a
+     drag-and-drop zone for any file inputs. Then STOP and wait. The user fills
+     out the form and submits it; the submission starts the run directly inside
+     the MCP server.
 
-     Two possible shapes come back:
+     You will see a chat message of the shape:
+       "Run started for agent {agent_id}, run_id: {run_id}. Please check its status."
+     Pull the `run_id` out of that message and keep it in context.
 
-       (B.1) No file inputs needed:
-             `{success: true, run_id, status, elicited_inputs}` → go directly to Step D.
+     If instead the user cancels, you'll see "Cancelled — did not run {name}." —
+     stop and ask what they want to change.
 
-       (B.2) File inputs needed:
-             `{success: true, pending_run_id, elicited_inputs, file_fields: [{name, description}, ...]}`
-             → go to Step C to collect and upload each file.
-
-     On failure: tell the user the error and stop.
-
-   Step C — Upload files (only if Step B returned a `pending_run_id`):
-     For each entry in `file_fields`:
-       1. Ask the user for a local path to the file:
-          "I need a file for **{name}** ({description}). What's the local path?"
-       2. Use the Bash tool to read the file and base64-encode it:
-          `base64 -i <path>` on macOS/Linux (output is the base64 string).
-       3. Call `upload_file_to_run(pending_run_id=<...>, field_name=<name>, filename=<basename of path>, content_base64=<the base64 string>)`.
-       4. On failure, tell the user and stop — do not attempt to start the run with
-          missing files.
-
-     Once ALL files have been uploaded successfully, call
-     `start_pending_run(pending_run_id=<...>)`. On success you receive `{run_id, status}`.
-     Keep `run_id` in context and go to Step D.
-
-   Step D — Poll until complete:
-     Call `get_run_status(run_id=<from Step B.1 or C>)`. If `status` is in
+   Step C — Poll until complete:
+     Call `get_run_status(run_id=<from Step B>)`. If `status` is in
      `[pending, running, paused]`, tell the user "Running... current status: {status}"
      and poll again every ~10 seconds within the turn. When `status` is in
      `[completed, failed, cancelled]`, stop polling.
 
-   Step E — Surface the result:
+   Step D — Surface the result:
      If terminal status is `completed`: call
      `get_run_status(run_id=<...>, output_only=true)` once more to fetch
      `run_output`, then show the output to the user in a fenced code block
