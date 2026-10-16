@@ -1,19 +1,19 @@
-# Board JSON Schema Reference
+# Agent JSON Schema Reference
 
-This is the authoritative specification for a valid board draft.
-The edit_worker builds boards by calling the granular tools (init_board, add_swimlane, add_task, etc.)
+This is the authoritative specification for a valid agent draft.
+The edit_worker builds agents by calling the granular tools (init_board, add_swimlane, add_task, etc.)
 which internally construct this structure. Read this to understand what each field means
 and what constraints apply.
 
 ---
 
-## Top-level Board Object
+## Top-level Agent Object
 
 ```json
 {
-  "name":          "Human-readable board name",
-  "description":   "One paragraph: what this board does",
-  "instructions":  "Optional guidance shown to the user when running the board",
+  "name":          "Human-readable agent name",
+  "description":   "One paragraph: what this agent does",
+  "instructions":  "Optional guidance shown to the user when running the agent",
   "input_schema":  { ... },
   "swimlanes":     [ ... ],
   "default_model": null,
@@ -39,7 +39,7 @@ and what constraints apply.
 
 ## input_schema
 
-Defines what the user fills in each time they run the board (per-run inputs).
+Defines what the user fills in each time they run the agent (per-run inputs).
 Do NOT include one-time settings here — those go into `configurations`.
 
 ```json
@@ -95,7 +95,7 @@ Do NOT include one-time settings here — those go into `configurations`.
 
 | Field | Notes |
 |---|---|
-| `name` | Unique within the board. Shown in the UI. |
+| `name` | Unique within the agent. Shown in the UI. |
 | `position` | 0-indexed. Auto-managed by tools — don't set manually. |
 | `instructions` | Optional description shown to users. |
 | `tasks` | At least one task required. |
@@ -286,7 +286,7 @@ Branch swimlanes that reconverge must share a `branch_group` string and have `ne
 
 ---
 
-## Typical Board Structure
+## Typical Agent Structure
 
 ```
 Swimlane 0: Data Ingestion

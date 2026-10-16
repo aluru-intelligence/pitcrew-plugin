@@ -4,7 +4,7 @@ description: >
   Read and analyze files uploaded by the user. Use when the user references
   a file, data, document, CSV, or PDF, or when uploaded files are relevant
   to the current request. Files are at /files/, workspace cache at /workspace/.
-compatibility: Board Builder V2
+compatibility: Agent Builder V2
 ---
 
 ## When to Use

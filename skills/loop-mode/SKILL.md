@@ -1,16 +1,16 @@
 ---
 name: loop-mode
 description: >
-  Add a loop swimlane to a board. Activate when the user's workflow needs to
+  Add a loop swimlane to an agent. Activate when the user's workflow needs to
   process each item in a list — e.g. "for each email", "for every client",
   "process each row". Loop is a swimlane-level feature, not a task_type.
-compatibility: Board Builder V2
+compatibility: Agent Builder V2
 ---
 
 ## What a loop swimlane is
 
 A loop swimlane runs all its tasks **once per item** in a runtime list from state.
-The compiler handles the iteration — the board JSON only needs four extra fields on
+The compiler handles the iteration — the agent JSON only needs four extra fields on
 the swimlane object. The tasks inside are normal `llm_call` and `tool_call` tasks.
 
 ---
@@ -128,7 +128,7 @@ Specifies which fields to extract from each iteration and store in the results e
 
 - Left side: the key name in each result entry
 - Right side: JSONPath to the value within `task_outputs` for that iteration
-- Uses `sl<N>_t<N>` task refs, same as everywhere else in the board
+- Uses `sl<N>_t<N>` task refs, same as everywhere else in the agent
 
 If `loop_output_mapping` is omitted, the last task's full output is stored as `"output"` per entry.
 
@@ -136,7 +136,7 @@ If `loop_output_mapping` is omitted, the last task's full output is stored as `"
 
 ## Complete example — Analyse each uploaded email
 
-Board: user uploads a JSON file of emails, the board reads it, then analyses each email for sentiment.
+Agent: user uploads a JSON file of emails, the agent reads it, then analyses each email for sentiment.
 
 ```json
 {

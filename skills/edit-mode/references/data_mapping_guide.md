@@ -1,6 +1,6 @@
 # Data Mapping Guide
 
-This guide explains how data flows between tasks in a board.
+This guide explains how data flows between tasks in an agent.
 Every task reads from source paths via `input_mapping` and writes
 results to state paths via `output_mapping`.
 

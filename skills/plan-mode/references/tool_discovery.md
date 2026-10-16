@@ -174,10 +174,10 @@ You do not need to discover them — include them in any plan that needs them:
 ### Data validation/compliance
 - Policy checks → `validate_content` (if it appears in grep results)
 - Custom validation logic → `code_gen` (Python sandbox, no network)
-- LLM-based assessment → use an `llm_call` task in the board
+- LLM-based assessment → use an `llm_call` task in the agent
 
 ### Final output (always include)
-- `generate_report` — for any board producing structured findings, summaries, or reports
+- `generate_report` — for any agent producing structured findings, summaries, or reports
 - Do NOT use plain `llm_call` as the last task unless the output is conversational text only
 
 ---
@@ -197,4 +197,4 @@ Do NOT include:
 - Tools that require integrations the user hasn't mentioned needing
 
 The edit_worker will read the tool schemas from `/tools/` using these names
-to get the exact input_schema parameters before building the board.
+to get the exact input_schema parameters before building the agent.

@@ -1,32 +1,32 @@
 ---
 name: config-mode
 description: >
-  Generate the configurations block (per-run settings panel) for a completed board.
+  Generate the configurations block (per-run settings panel) for a completed agent.
   Analyse tool_call and llm_call tasks for hardcoded params that users should be able
-  to tune per-run. Activate after a board has been built and knowledge has been generated.
-compatibility: Board Builder V2
+  to tune per-run. Activate after an agent has been built and knowledge has been generated.
+compatibility: Agent Builder V2
 ---
 
 ## Role
 
-You are the config worker. You analyse a completed board's tasks and identify
+You are the config worker. You analyse a completed agent's tasks and identify
 hardcoded parameter values that users would reasonably want to adjust between runs.
-You receive the board from the orchestrator, generate a schema-driven configurations
+You receive the agent from the orchestrator, generate a schema-driven configurations
 block, and return it in your completion payload — the orchestrator merges it into
-the board_draft.
+the agent_spec.
 
 <constraints>
-- The orchestrator passes the current board_draft JSON in your dispatch prompt — read it from there before analysing
+- The orchestrator passes the current agent_spec JSON in your dispatch prompt — read it from there before analysing
 - Never expose run_input fields — those are already in input_schema
 - Produce at most 12 fields total
 - Return the configurations JSON exactly once in your completion payload
 - If nothing is worth configuring, return `null` as the configurations value
-- Do NOT modify the board structure — only produce the configurations block
+- Do NOT modify the agent structure — only produce the configurations block
 </constraints>
 
 ## Steps
 
-1. Read the board_draft JSON from the dispatch prompt the orchestrator passed you.
+1. Read the agent_spec JSON from the dispatch prompt the orchestrator passed you.
 
 2. Build an inventory of hardcoded values:
    - tool_call tasks: look at `tool_config.params` for hardcoded values
@@ -138,5 +138,5 @@ Return the configurations object in your completion payload with exactly this JS
 }
 ```
 
-Place it under `payload.configurations` in your return value — no markdown fences, no extra wrapper keys. The orchestrator will merge it into the board_draft.
+Place it under `payload.configurations` in your return value — no markdown fences, no extra wrapper keys. The orchestrator will merge it into the agent_spec.
 If nothing qualifies, return `payload.configurations = null`.

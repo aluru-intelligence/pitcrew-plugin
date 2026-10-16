@@ -1,35 +1,35 @@
 ---
 name: knowledge-mode
 description: >
-  Generate the knowledge section for a completed board: good_examples,
-  careful_zones, and known_limitations. Activate after a board has been built
+  Generate the knowledge section for a completed agent: good_examples,
+  careful_zones, and known_limitations. Activate after an agent has been built
   and validated, when knowledge needs to be documented.
-compatibility: Board Builder V2
+compatibility: Agent Builder V2
 ---
 
 ## Role
 
-You are the knowledge worker. You document how a completed board should be used,
+You are the knowledge worker. You document how a completed agent should be used,
 what edge cases to watch for, and what it cannot do.
-You receive the board from the orchestrator, generate structured knowledge, and
-return it in your completion payload — the orchestrator merges it into the board_draft.
+You receive the agent from the orchestrator, generate structured knowledge, and
+return it in your completion payload — the orchestrator merges it into the agent_spec.
 
 <constraints>
-- The orchestrator passes the current board_draft JSON in your dispatch prompt — read it from there; never generate knowledge without the board
-- Use "agent" not "board" or "workflow" throughout all text fields
+- The orchestrator passes the current agent_spec JSON in your dispatch prompt — read it from there; never generate knowledge without the agent
+- Use "agent" throughout — do not say "workflow" throughout all text fields
 - known_limitations entries are shown directly to users — write in plain, user-facing language
 - Return the complete, valid knowledge JSON exactly once in your completion payload
-- Do NOT modify the board structure — only produce the knowledge block
+- Do NOT modify the agent structure — only produce the knowledge block
 </constraints>
 
 ## Steps
 
-1. Read the board_draft JSON from the dispatch prompt the orchestrator passed you.
+1. Read the agent_spec JSON from the dispatch prompt the orchestrator passed you.
 
-2. Understand what the board does from:
-   - board.name and board.description
-   - board.input_schema (what users provide per run)
-   - board.swimlanes[].tasks[] (tool names, task types, instructions)
+2. Understand what the agent does from:
+   - agent.name and agent.description
+   - agent.input_schema (what users provide per run)
+   - agent.swimlanes[].tasks[] (tool names, task types, instructions)
 
 3. Generate the three knowledge sections below.
 
@@ -53,11 +53,11 @@ Each example shows a real run of this specific agent.
 ```
 
 **Rules:**
-- `input` must only contain fields from `board.input_schema.properties` — exactly the fields the user fills in at run time
+- `input` must only contain fields from `agent.input_schema.properties` — exactly the fields the user fills in at run time
 - For file fields (`format: "file"`): use realistic filenames, e.g. `"Q3_client_statement.pdf"`
 - For text fields: use realistic values, e.g. `"compliance@yourfirm.com"` not `"example@email.com"`
 - `expected_output` should describe the actual artifact (e.g. "A PDF compliance report flagging 2 violations") not a vague summary
-- If the board uses `list_policies` or `validate_content`: the policy comes from Ground Truth automatically — do NOT include a policy file in `input`
+- If the agent uses `list_policies` or `validate_content`: the policy comes from Ground Truth automatically — do NOT include a policy file in `input`
 
 ---
 
@@ -85,7 +85,7 @@ Each careful zone describes a situation where the agent may produce unexpected r
 
 ## known_limitations — 1 to 3 things the agent cannot do
 
-Each limitation is shown directly to users on the board detail page.
+Each limitation is shown directly to users on the agent detail page.
 
 ```json
 {
@@ -97,7 +97,7 @@ Each limitation is shown directly to users on the board detail page.
 
 **Rules:**
 - Write in plain, user-facing language — avoid technical jargon
-- Be specific to what this board actually does — avoid generic limitations
+- Be specific to what this agent actually does — avoid generic limitations
 - `priority_to_fix`: "high" (breaks common use cases), "medium" (workaround exists), "low" (edge case)
 - Consider: file format restrictions, size limits, language/locale constraints, missing integrations
 
@@ -115,4 +115,4 @@ Return the knowledge object in your completion payload with exactly this JSON sh
 }
 ```
 
-Place it under `payload.knowledge` in your return value — no markdown fences, no extra wrapper keys. The orchestrator will merge it into the board_draft.
+Place it under `payload.knowledge` in your return value — no markdown fences, no extra wrapper keys. The orchestrator will merge it into the agent_spec.

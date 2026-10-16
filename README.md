@@ -1,6 +1,6 @@
 # PitCrew Plugin
 
-Conversational workflow builder for the PitCrew compliance platform. Describe a workflow and the plugin produces a `board_draft` JSON spec you can run on PitCrew.
+Conversational workflow builder for the PitCrew compliance platform. Describe a workflow and the plugin produces an `agent_spec` JSON spec you can run on PitCrew.
 
 ## Status
 
@@ -11,9 +11,9 @@ MVP — Builder only. Produces workflow JSON; execution against the PitCrew MCP 
 - **Orchestrator** (`skills/orchestrator/`) — routes each user turn to a specialist subagent.
 - **Subagents** (`agents/`) — one per worker lifted from `factory_v2`:
   - `plan-worker` — discovers tools, produces a plan spec
-  - `edit-worker` — builds `board_draft` JSON from an approved plan
-  - `chat-worker` — read-only questions about the current board
-  - `knowledge-worker` — fills the `knowledge` block on a completed board
+  - `edit-worker` — builds `agent_spec` JSON from an approved plan
+  - `chat-worker` — read-only questions about the current agent
+  - `knowledge-worker` — fills the `knowledge` block on a completed agent
   - `config-worker` — fills the `configurations` block
 - **Skills** (`skills/`) — detailed how-to each worker activates (`plan-mode`, `edit-mode`, etc.).
 - **Tools catalog** (`tools/`) — one `.md` per available tool, with JSON frontmatter. Snapshot of `harness/tools/` from S3; `plan-worker` reads this to pick tools.
