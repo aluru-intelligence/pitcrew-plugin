@@ -1,8 +1,26 @@
 {
   "name": "pitcrew",
+  "displayName": "PitCrew",
   "version": "0.1.0",
-  "description": "Build AI compliance workflows conversationally. Describe your workflow and PitCrew produces a workflow JSON spec you can run on the PitCrew platform.",
+  "description": "Build and run AI compliance agents by chatting. Describe an agent in plain English and PitCrew drafts it, publishes it to your workspace, and runs it on your documents — without leaving the conversation.",
   "author": {
-    "name": "Aluru Intel"
-  }
+    "name": "Aluru Intel",
+    "url": "https://www.gopitcrew.com/",
+    "email": "support@gopitcrew.com"
+  },
+  "homepage": "https://www.gopitcrew.com/",
+  "icon": "./logo.svg",
+  "documentationUrl": "https://www.gopitcrew.com/",
+  "supportUrl": "mailto:support@gopitcrew.com",
+  "privacyPolicyUrl": "https://www.gopitcrew.com/privacy",
+  "termsOfServiceUrl": "https://www.gopitcrew.com/terms",
+  "keywords": [
+    "compliance",
+    "ai-agents",
+    "workflow-automation",
+    "financial-services",
+    "advisors",
+    "document-processing",
+    "pitcrew"
+  ]
 }
