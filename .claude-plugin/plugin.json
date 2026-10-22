@@ -9,7 +9,8 @@
     "email": "support@gopitcrew.com"
   },
   "homepage": "https://www.gopitcrew.com/",
-  "icon": "./logo.svg",
+  "icon": "./icon.svg",
+  "license": "MIT",
   "documentationUrl": "https://www.gopitcrew.com/",
   "supportUrl": "mailto:support@gopitcrew.com",
   "privacyPolicyUrl": "https://www.gopitcrew.com/privacy",
