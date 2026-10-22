@@ -1,0 +1,15 @@
+{
+  "name": "pitcrew-plugin",
+  "owner": {
+    "name": "Aluru Intel",
+    "url": "https://www.gopitcrew.com/"
+  },
+  "description": "Aluru Intel plugins for Claude.",
+  "plugins": [
+    {
+      "name": "pitcrew",
+      "source": "./",
+      "description": "Build and run AI compliance agents by chatting."
+    }
+  ]
+}
