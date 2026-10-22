@@ -1,53 +1,60 @@
-# PitCrew Plugin
+# PitCrew
 
-Conversational workflow builder for the PitCrew compliance platform. Describe a workflow and the plugin produces an `agent_spec` JSON spec you can run on PitCrew.
+**Build and run AI compliance agents by chatting.** Describe an agent in plain English, review the plan, and PitCrew publishes it to your workspace and runs it on your documents — without leaving the conversation.
 
-## Status
+Built for compliance teams, financial advisors, and operations teams who want to automate repeatable document work without hand-building workflows.
 
-MVP — Builder only. Produces workflow JSON; execution against the PitCrew MCP server is a later phase.
+---
 
-## Architecture
+## What you can do with it
 
-- **Orchestrator** (`skills/orchestrator/`) — routes each user turn to a specialist subagent.
-- **Subagents** (`agents/`) — one per worker lifted from `factory_v2`:
-  - `plan-worker` — discovers tools, produces a plan spec
-  - `edit-worker` — builds `agent_spec` JSON from an approved plan
-  - `chat-worker` — read-only questions about the current agent
-  - `knowledge-worker` — fills the `knowledge` block on a completed agent
-  - `config-worker` — fills the `configurations` block
-- **Skills** (`skills/`) — detailed how-to each worker activates (`plan-mode`, `edit-mode`, etc.).
-- **Tools catalog** (`tools/`) — one `.md` per available tool, with JSON frontmatter. Snapshot of `harness/tools/` from S3; `plan-worker` reads this to pick tools.
-- **MCP** (`.mcp.json`) — points at the PitCrew MCP server for context tools (`list_policies`, `list_agents`). Streamable-http with OAuth 2.1 PKCE; the host handles the auth flow on first connect.
+Ask Claude in plain English and the plugin takes over:
 
-## Local dev (Claude Code)
+- *"Build me an agent that summarises Form ADV filings and emails the key risks to compliance@myfirm.com."*
+- *"Create a workflow that reads a client's quarterly statement, extracts the top three holdings, and flags anything over a 10% concentration."*
+- *"Build an agent that takes a batch of billing exports, checks each row against our fee schedule, and reports mismatches."*
+- *"Run my 'Policy Diff Checker' agent on the three PDFs I just uploaded to the Q4 Compliance collection."*
 
-For iteration, load the plugin for a single session with `--plugin-dir` — no marketplace, no install step:
+Behind the scenes, the plugin coordinates a small team of specialists — a planner, an agent builder, a knowledge writer, and a settings generator — to turn your description into a complete, runnable PitCrew agent. You review the plan before anything is built; you review the finished agent before anything runs.
 
-```bash
-# Validate first (optional but useful)
-claude plugin validate /Users/sandeepbabu/projects/pitcrew-plugin
+---
 
-# Start a session with the plugin loaded
-claude --plugin-dir /Users/sandeepbabu/projects/pitcrew-plugin
-```
+## How it works
 
-Then describe a workflow in chat and the orchestrator will dispatch to the right worker.
+1. **Describe.** Tell Claude what you want the agent to do.
+2. **Plan.** The planner proposes a step-by-step plan and asks for your approval.
+3. **Build.** Once you approve, the agent builder produces a complete workflow specification — swimlanes, tasks, inputs, settings — ready to run.
+4. **Publish.** The spec is published to your PitCrew workspace as a new agent.
+5. **Run.** Provide inputs (or attach documents from a collection you own) and the agent executes on PitCrew. You see the final report inline in the chat.
 
-Inside the session, run `/plugin` to confirm the plugin loaded (check the **Installed** tab, and the **Errors** tab if anything is off). After editing any file in the plugin, run `/reload-plugins` to pick up the changes without restarting.
+Every step runs inside one conversation. No tabs, no form-filling, no copy-paste.
 
-For always-on loading, symlink or copy this directory into `~/.claude/skills/` — Claude Code auto-loads any folder there that contains `.claude-plugin/plugin.json`.
+---
 
-For distribution (later), the plugin will be published through a marketplace — see https://code.claude.com/docs/en/plugins/marketplace-reference
+## Requirements
 
-## Repo layout
+- A PitCrew account at [gopitcrew.com](https://www.gopitcrew.com/). The first time you run an agent, Claude prompts you to connect — a one-time sign-in handles it.
+- Claude on any supported surface: claude.ai, Claude Desktop, Claude Code, Cowork.
 
-```
-pitcrew-plugin/
-├── .claude-plugin/plugin.json       # Claude Code manifest
-├── .mcp.json                        # MCP server config
-├── skills/                          # SKILL.md files (how workers should behave)
-├── agents/                          # subagent definitions (dispatch entrypoints)
-├── prompts/                         # system prompts referenced from skills/agents
-├── tools/                           # tool catalog snapshot
-└── README.md
-```
+---
+
+## Privacy and data handling
+
+PitCrew is purpose-built for regulated workflows. Documents you process through the plugin flow to your PitCrew workspace, where your organisation's data retention and access controls apply.
+
+- **Privacy policy:** [gopitcrew.com/privacy](https://www.gopitcrew.com/privacy)
+- **Security overview:** [gopitcrew.com/security](https://www.gopitcrew.com/security)
+- **Terms of service:** [gopitcrew.com/terms](https://www.gopitcrew.com/terms)
+
+---
+
+## Support
+
+- **Email:** [support@gopitcrew.com](mailto:support@gopitcrew.com)
+- **Homepage:** [gopitcrew.com](https://www.gopitcrew.com/)
+
+---
+
+## License
+
+MIT. See [LICENSE](./LICENSE).
