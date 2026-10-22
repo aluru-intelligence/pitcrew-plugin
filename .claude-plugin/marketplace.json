@@ -1,10 +1,10 @@
 {
   "name": "pitcrew-plugin",
   "owner": {
-    "name": "Aluru Intel",
+    "name": "PitCrew",
     "url": "https://www.gopitcrew.com/"
   },
-  "description": "Aluru Intel plugins for Claude.",
+  "description": "PitCrew plugins for Claude.",
   "plugins": [
     {
       "name": "pitcrew",

@@ -1,6 +1,6 @@
 # PitCrew
 
-**Build and run AI compliance agents by chatting.** Describe an agent in plain English, review the plan, and PitCrew publishes it to your workspace and runs it on your documents — without leaving the conversation.
+**Build and run AI compliance agents by chatting.** Describe an agent in plain English, review the plan, and PitCrew publishes it to your workspace and runs it on your documents, without leaving the conversation.
 
 Built for compliance teams, financial advisors, and operations teams who want to automate repeatable document work without hand-building workflows.
 
@@ -15,7 +15,7 @@ Ask Claude in plain English and the plugin takes over:
 - *"Build an agent that takes a batch of billing exports, checks each row against our fee schedule, and reports mismatches."*
 - *"Run my 'Policy Diff Checker' agent on the three PDFs I just uploaded to the Q4 Compliance collection."*
 
-Behind the scenes, the plugin coordinates a small team of specialists — a planner, an agent builder, a knowledge writer, and a settings generator — to turn your description into a complete, runnable PitCrew agent. You review the plan before anything is built; you review the finished agent before anything runs.
+Behind the scenes, the plugin coordinates a small team of specialists (a planner, an agent builder, a knowledge writer, and a settings generator) to turn your description into a complete, runnable PitCrew agent. You review the plan before anything is built; you review the finished agent before anything runs.
 
 ---
 
@@ -23,7 +23,7 @@ Behind the scenes, the plugin coordinates a small team of specialists — a plan
 
 1. **Describe.** Tell Claude what you want the agent to do.
 2. **Plan.** The planner proposes a step-by-step plan and asks for your approval.
-3. **Build.** Once you approve, the agent builder produces a complete workflow specification — swimlanes, tasks, inputs, settings — ready to run.
+3. **Build.** Once you approve, the agent builder produces a complete workflow specification (swimlanes, tasks, inputs, settings) ready to run.
 4. **Publish.** The spec is published to your PitCrew workspace as a new agent.
 5. **Run.** Provide inputs (or attach documents from a collection you own) and the agent executes on PitCrew. You see the final report inline in the chat.
 
@@ -33,7 +33,7 @@ Every step runs inside one conversation. No tabs, no form-filling, no copy-paste
 
 ## Requirements
 
-- A PitCrew account at [gopitcrew.com](https://www.gopitcrew.com/). The first time you run an agent, Claude prompts you to connect — a one-time sign-in handles it.
+- A PitCrew account at [gopitcrew.com](https://www.gopitcrew.com/). The first time you run an agent, Claude prompts you to connect; a one-time sign-in handles it.
 - Claude on any supported surface: claude.ai, Claude Desktop, Claude Code, Cowork.
 
 ---
