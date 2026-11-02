@@ -55,6 +55,33 @@ PitCrew is purpose-built for regulated workflows. Documents you process through 
 
 ---
 
+## Development
+
+This repo uses a two-branch model:
+
+- `master` is the dev build. Plugin name is `pitcrew-dev`, and `.mcp.json` points at `mcp.dev.gopitcrew.com`.
+- `production` is the live build. Plugin name is `pitcrew`, and `.mcp.json` points at `mcp.gopitcrew.com`.
+
+Feature branches merge into `master` first. Once a change is verified on dev, `master` is merged into `production` to ship it.
+
+Three files are intentionally different between the two branches:
+
+- `.mcp.json`
+- `.claude-plugin/plugin.json`
+- `.claude-plugin/marketplace.json`
+
+To keep each branch's values intact during merges, run this one-time setup after cloning:
+
+```sh
+git config merge.ours.driver true
+```
+
+This registers the `ours` merge driver referenced in `.gitattributes`, so merging across branches preserves each branch's own copy of those three files instead of trying to combine them.
+
+Both plugin names (`pitcrew-dev` and `pitcrew`) can be installed side-by-side in the same Claude Code client.
+
+---
+
 ## License
 
 MIT. See [LICENSE](./LICENSE).
