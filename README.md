@@ -93,7 +93,7 @@ PitCrew is purpose-built for regulated workflows. Documents you process through 
 
 ## Development
 
-This repo is the **dev build** of the plugin (`pitcrew-dev`, pointing at `mcp.dev.gopitcrew.com`). It's a GitHub fork of the production repo (`aluru-intelligence/pitcrew-plugin`). Day-to-day work and product-team testing happens here. Shipping a verified change means opening a pull request from this fork into the production repo.
+This repo is the **dev build** of the plugin (`PitCrew MCP Dev`, pointing at `mcp.dev.gopitcrew.com`). It's a GitHub fork of the production repo (`aluru-intelligence/pitcrew-plugin`). Day-to-day work and product-team testing happens here. Shipping a verified change means opening a pull request from this fork into the production repo.
 
 The three files below carry the dev-vs-prod configuration and intentionally differ between the two repos:
 
@@ -101,7 +101,23 @@ The three files below carry the dev-vs-prod configuration and intentionally diff
 - `.claude-plugin/plugin.json`
 - `.claude-plugin/marketplace.json`
 
-These files should not be modified in this fork; they are the dev-side source of truth. When reviewing a dev → prod PR, the production repo keeps its own values for those three files.
+These files are the dev-side source of truth and should not be modified here except as a deliberate dev configuration change.
+
+### One-time setup (every clone)
+
+Run this once after cloning so the `merge=ours` driver in `.gitattributes` is active:
+
+```sh
+git config merge.ours.driver true
+```
+
+With this configured, local merges preserve each repo's own copy of the three branch-specific files.
+
+### Shipping to prod
+
+**Dev → prod merges must be done locally in the prod repo. Do not use GitHub's "Merge pull request" button on the cross-repo PR.** GitHub's web merge runs on their servers, which do not have your local git config, so the `merge=ours` driver does not kick in and the three config files can get silently overwritten.
+
+See the production repo's README for the exact local merge commands.
 
 Both the prod and dev builds can be installed side-by-side in Claude Code and Claude Desktop under different plugin names.
 
