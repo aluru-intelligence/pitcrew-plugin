@@ -1,15 +1,15 @@
 {
-  "name": "pitcrew-plugin-dev",
+  "name": "pitcrew-plugin",
   "owner": {
     "name": "PitCrew",
     "url": "https://www.gopitcrew.com/"
   },
-  "description": "PitCrew plugins for Claude (dev).",
+  "description": "PitCrew plugins for Claude.",
   "plugins": [
     {
-      "name": "pitcrew-dev",
+      "name": "pitcrew",
       "source": "./",
-      "description": "Build and run AI compliance agents by chatting (dev build, points at mcp.dev.gopitcrew.com)."
+      "description": "Build and run AI compliance agents by chatting."
     }
   ]
 }

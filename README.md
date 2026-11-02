@@ -57,28 +57,17 @@ PitCrew is purpose-built for regulated workflows. Documents you process through 
 
 ## Development
 
-This repo uses a two-branch model:
+This repo is the **production build** of the plugin (`pitcrew`, pointing at `mcp.gopitcrew.com`). A separate dev-build repo is maintained as a GitHub fork of this one, and shipping a change means opening a pull request from the fork into this repo.
 
-- `master` is the dev build. Plugin name is `pitcrew-dev`, and `.mcp.json` points at `mcp.dev.gopitcrew.com`.
-- `production` is the live build. Plugin name is `pitcrew`, and `.mcp.json` points at `mcp.gopitcrew.com`.
-
-Feature branches merge into `master` first. Once a change is verified on dev, `master` is merged into `production` to ship it.
-
-Three files are intentionally different between the two branches:
+The three files below carry the dev-vs-prod configuration and intentionally differ between the two repos:
 
 - `.mcp.json`
 - `.claude-plugin/plugin.json`
 - `.claude-plugin/marketplace.json`
 
-To keep each branch's values intact during merges, run this one-time setup after cloning:
+When reviewing a PR from the dev fork, those three files will always appear in the diff. Keep this repo's values (prod URL, plugin name `pitcrew`, marketplace name `pitcrew-plugin`) and merge the rest.
 
-```sh
-git config merge.ours.driver true
-```
-
-This registers the `ours` merge driver referenced in `.gitattributes`, so merging across branches preserves each branch's own copy of those three files instead of trying to combine them.
-
-Both plugin names (`pitcrew-dev` and `pitcrew`) can be installed side-by-side in the same Claude Code client.
+Both the prod and dev builds can be installed side-by-side in Claude Code and Claude Desktop under different plugin names.
 
 ---
 

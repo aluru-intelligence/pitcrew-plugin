@@ -1,6 +1,6 @@
 {
-  "name": "pitcrew-dev",
-  "displayName": "PitCrew (Dev)",
+  "name": "pitcrew",
+  "displayName": "PitCrew",
   "version": "0.1.0",
   "description": "Build and run AI compliance agents by chatting. Describe an agent in plain English and PitCrew drafts it, publishes it to your workspace, and runs it on your documents, without leaving the conversation.",
   "author": {
