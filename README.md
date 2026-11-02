@@ -57,7 +57,7 @@ PitCrew is purpose-built for regulated workflows. Documents you process through 
 
 ## Development
 
-This repo is the **production build** of the plugin (`pitcrew`, pointing at `mcp.gopitcrew.com`). A separate dev-build repo is maintained as a GitHub fork of this one, and shipping a change means opening a pull request from the fork into this repo.
+This repo is the **dev build** of the plugin (`pitcrew-dev`, pointing at `mcp.dev.gopitcrew.com`). It's a GitHub fork of the production repo (`aluru-intelligence/pitcrew-plugin`). Day-to-day work and product-team testing happens here. Shipping a verified change means opening a pull request from this fork into the production repo.
 
 The three files below carry the dev-vs-prod configuration and intentionally differ between the two repos:
 
@@ -65,7 +65,7 @@ The three files below carry the dev-vs-prod configuration and intentionally diff
 - `.claude-plugin/plugin.json`
 - `.claude-plugin/marketplace.json`
 
-When reviewing a PR from the dev fork, those three files will always appear in the diff. Keep this repo's values (prod URL, plugin name `pitcrew`, marketplace name `pitcrew-plugin`) and merge the rest.
+These files should not be modified in this fork; they are the dev-side source of truth. When reviewing a dev → prod PR, the production repo keeps its own values for those three files.
 
 Both the prod and dev builds can be installed side-by-side in Claude Code and Claude Desktop under different plugin names.
 
