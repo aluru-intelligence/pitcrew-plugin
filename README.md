@@ -38,6 +38,42 @@ Every step runs inside one conversation. No tabs, no form-filling, no copy-paste
 
 ---
 
+## Install
+
+PitCrew ships as two builds: a **production** build and an internal **dev** build. Each lives in its own GitHub repo and installs as a separate marketplace, so both can coexist in the same Claude client.
+
+| Build | Marketplace source | Plugin name |
+|---|---|---|
+| Production | `aluru-intelligence/pitcrew-plugin` | `pitcrew` |
+| Dev (internal testing) | `aluru-intelligence/pitcrew-plugin-dev` | `pitcrew-dev` |
+
+### In Claude Desktop or on claude.ai
+
+1. Open **Customize → Plugins → + Add → Add marketplace**.
+2. Paste the marketplace source for the build you want (see table above).
+3. Click **Sync**. The plugin appears in the marketplace list.
+4. Open the plugin's card and click **Add** to enable it on your account.
+
+### In Claude Code
+
+Production:
+
+```sh
+/plugin marketplace add aluru-intelligence/pitcrew-plugin
+/plugin install pitcrew@pitcrew-plugin
+```
+
+Dev:
+
+```sh
+/plugin marketplace add aluru-intelligence/pitcrew-plugin-dev
+/plugin install pitcrew-dev@pitcrew-plugin-dev
+```
+
+The first time you run a PitCrew tool, Claude will prompt you to sign in to your PitCrew account.
+
+---
+
 ## Privacy and data handling
 
 PitCrew is purpose-built for regulated workflows. Documents you process through the plugin flow to your PitCrew workspace, where your organisation's data retention and access controls apply.
