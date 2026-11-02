@@ -65,33 +65,7 @@ The three files below carry the dev-vs-prod configuration and intentionally diff
 - `.claude-plugin/plugin.json`
 - `.claude-plugin/marketplace.json`
 
-### One-time setup (every clone)
-
-Run this once after cloning so the `merge=ours` driver in `.gitattributes` is active:
-
-```sh
-git config merge.ours.driver true
-```
-
-With this configured, local merges preserve each repo's own copy of the three branch-specific files.
-
-### Merging dev into prod
-
-**Dev → prod merges must be done locally. Do not use GitHub's "Merge pull request" button.** GitHub's web merge runs on their servers, which do not have your local git config, so the driver does not kick in and the three files can get silently overwritten.
-
-The local merge flow:
-
-```sh
-cd /path/to/pitcrew-plugin
-git checkout master
-git pull origin master
-git remote add dev git@github.com:aluru-intelligence/pitcrew-plugin-dev.git 2>/dev/null || true
-git fetch dev
-git merge --no-ff dev/master
-git push origin master
-```
-
-Any open dev → prod PR on GitHub will auto-close as merged once the commit lands on `master`.
+When reviewing a PR from the dev fork, those three files will always appear in the diff. Keep this repo's values (prod URL, plugin name `pitcrew`, marketplace name `pitcrew-plugin`) and merge the rest.
 
 Both the prod and dev builds can be installed side-by-side in Claude Code and Claude Desktop under different plugin names.
 
