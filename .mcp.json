@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "pitcrew": {
+    "PitCrewDev": {
       "type": "http",
       "url": "https://mcp.dev.gopitcrew.com/mcp"
     }
