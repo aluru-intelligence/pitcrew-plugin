@@ -44,8 +44,8 @@ PitCrew ships as two builds: a **production** build and an internal **dev** buil
 
 | Build | Marketplace source | Plugin name |
 |---|---|---|
-| Production | `aluru-intelligence/pitcrew-plugin` | `pitcrew` |
-| Dev (internal testing) | `aluru-intelligence/pitcrew-plugin-dev` | `pitcrew-dev` |
+| Production | `pitcrew-agents/pitcrew-plugin` | `pitcrew` |
+| Dev (internal testing) | `pitcrew-agents/pitcrew-plugin-dev` | `pitcrew-dev` |
 
 ### In Claude Desktop or on claude.ai
 
@@ -59,14 +59,14 @@ PitCrew ships as two builds: a **production** build and an internal **dev** buil
 Production:
 
 ```sh
-/plugin marketplace add aluru-intelligence/pitcrew-plugin
+/plugin marketplace add pitcrew-agents/pitcrew-plugin
 /plugin install pitcrew@pitcrew-plugin
 ```
 
 Dev:
 
 ```sh
-/plugin marketplace add aluru-intelligence/pitcrew-plugin-dev
+/plugin marketplace add pitcrew-agents/pitcrew-plugin-dev
 /plugin install pitcrew-dev@pitcrew-plugin-dev
 ```
 
